@@ -1,0 +1,10 @@
+ <h1>Vehicle Recalls</h1>
+<% @vehicle_recalls.each do |x| %>
+<p class= "niceBorder">
+<b>Recall ID: </b><%= x['recallId'] %><br />
+<b>Recall Title: </b><%= x['title'] %><br />
+<b>Category: </b><%= x['category'] %><br />
+<b>Date Published: </b> <%= Time.at(x['date_published']).to_datetime.to_s %><br />
+<b>URL: </b> <%= x['url'] %><br />
+<% end %>
+</p>

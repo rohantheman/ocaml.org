@@ -2,21 +2,41 @@ require 'net/http'
 require 'json'
 require 'uri'
 require 'date'
+require 'sinatra'
+require 'sinatra/reloader' if development?
 
 url = 'http://healthycanadians.gc.ca/recall-alert-rappel-avis/api/recent/en'
 uri = URI(url)
 response = Net::HTTP.get(uri)
 recalls = JSON.parse(response)
 
-show_results = lambda {
-  recalls['results']['ALL'].each do |doc|
-    puts 'Recall ID: ' + doc['recallId']
-    puts 'Recall Title: ' + doc['title']
-    puts 'Category: ' + doc['category'].to_s
-    puts 'Date Published: ' + Time.at(doc['date_published']).to_datetime.to_s
-    puts 'URL: ' + doc['url']
-    puts '**************'
-    puts ''
-  end
-}
-show_results.call
+# index page
+get '/' do
+  erb :index
+end
+
+# postal code pages
+get '/allrecalls' do
+  @all_recalls = recalls['results']['ALL']
+  erb :allrecalls
+end
+
+get '/foodrecalls' do
+  @food_recalls = recalls['results']['FOOD']
+  erb :foodrecalls
+end
+
+get '/vehiclerecalls' do
+  @vehicle_recalls = recalls['results']['VEHICLE']
+  erb :vehiclerecalls
+end
+
+get '/healthrecalls' do
+  @health_recalls = recalls['results']['HEALTH']
+  erb :healthrecalls
+end
+
+get '/cpsrecalls' do
+  @cps_recalls = recalls['results']['CPS']
+  erb :cpsrecalls
+end
