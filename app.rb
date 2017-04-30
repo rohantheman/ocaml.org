@@ -40,3 +40,13 @@ get '/cpsrecalls' do
   @cps_recalls = recalls['results']['CPS']
   erb :cpsrecalls
 end
+
+get '/recalldetails/:id' do
+  details_url = 'http://healthycanadians.gc.ca/recall-alert-rappel-avis/api/' + params[:id] + '/en'
+  puts details_url
+  uri = URI(details_url)
+  response = Net::HTTP.get(uri)
+  recall_item = JSON.parse(response)
+  @recall_details = recall_item
+  erb :recalldetails
+end

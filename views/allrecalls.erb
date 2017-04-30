@@ -2,6 +2,7 @@
 <% @all_recalls.each do |x| %>
 <p class= "niceBorder">
 <b>Recall ID: </b><%= x['recallId'] %><br />
+<a href="/recalldetails/<%= x['recallId'] %>">Post</a>
 <b>Recall Title: </b><%= x['title'] %><br />
 <b>Category: </b><%= x['category'] %><br />
 <b>Date Published: </b> <%= Time.at(x['date_published']).to_datetime.to_s %><br />

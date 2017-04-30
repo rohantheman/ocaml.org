@@ -1,0 +1,14 @@
+ <h1>Recall Details</h1>
+<% @recall_details.each do |x| %>
+<p class= "niceBorder">
+<b><%= x[0]['url'] %></b>
+<b><%= x[0]['recallId'] %></b>
+<b><%= x[0]['start_date'] %></b>
+<b><%= x[0]['date_published'] %></b>
+<b><%= x[0]['category'] %></b>
+<b><%= x[0]['panels'] %></b>
+
+
+<%= x[1] %>
+<% end %>
+</p>
