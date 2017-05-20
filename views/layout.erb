@@ -1,19 +1,35 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="styles.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.1/css/bulma.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <title>Public Recalls</title>
     </head>
     <body>
-    <nav class="menu">
-        <li><a href="/allrecalls">All Recalls</a></li>
-        <li><a href="/foodrecalls">Food Recalls</a></li>
-        <li><a href="/vehiclerecalls">Vehicle Recalls</a></li>
-        <li><a href="/healthrecalls">Health Recalls</a></li>
-        <li><a href="/cpsrecalls">Consumer Product Safety Recalls</a></li>
-        <li><a href="/">Home</a></li>
-	</nav>
-    <h1 class="title">Recall Alerts Application</h1>
+    <nav class="nav">
+    <div class="nav-left nav-menu">
+      <a href="/" class="nav-item"><i class="fa fa-home fa-2x" aria-hidden="true"></i></a>
+      <a href="/allrecalls"class="nav-item">All Recalls</a>
+      <a href="/foodrecalls" class="nav-item">Food Recalls</a>
+      <a href="/vehiclerecalls" class="nav-item">Vehicle Recalls</a>
+      <a href= "/healthrecalls" class="nav-item">Health Recalls</a>
+      <a href= "/cpsrecalls" class="nav-item">Consumer Product Recalls</a>
+    </div>
+    <span class="nav-toggle">
+      <span></span>
+      <span></span>
+      <span></span>
+    </span>
+    <div class="nav-right nav-menu">
+      <a href="/settings" class="nav-item"><i class="fa fa-cogs fa-2x" aria-hidden="true"></i></i></a>
+      <a href="/logout" class="nav-item"><i class="fa fa-sign-out fa-2x" aria-hidden="true"></i></a>
+    </div>
+  </div>
+</nav>
+
+   <div class="notification">
+    <h1 class="title is-1 has-text-centered">Recall Alerts Application</h1>
 	      <%= yield %>
+</div>
     </body>
 </html>

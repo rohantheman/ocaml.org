@@ -1,10 +1,10 @@
- <h1>Food Recalls</h1>
+ <h1 class="subtitle is-5 has-text-centered">Food Recalls</h1>
 <% @food_recalls.each do |x| %>
-<p class= "niceBorder">
+<div class="box">
 <b>Recall ID: </b><%= x['recallId'] %><br />
 <b>Recall Title: </b><%= x['title'] %><br />
 <b>Category: </b><%= x['category'] %><br />
 <b>Date Published: </b> <%= Time.at(x['date_published']).to_datetime.to_s %><br />
 <b>URL: </b> <%= x['url'] %><br />
+</div>
 <% end %>
-</p>
