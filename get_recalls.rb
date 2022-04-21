@@ -3,7 +3,7 @@ require 'json'
 require 'uri'
 require 'date'
 
-url = 'http://healthycanadians.gc.ca/recall-alert-rappel-avis/api/recent/en'
+url = 'https://healthycanadians.gc.ca/recall-alert-rappel-avis/api/recent/en'
 uri = URI(url)
 response = Net::HTTP.get(uri)
 recalls = JSON.parse(response)
