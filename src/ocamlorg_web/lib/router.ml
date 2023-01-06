@@ -62,20 +62,29 @@ let package_route t =
       Dream.get Url.packages (Handler.packages t);
       Dream.get Url.packages_search (Handler.packages_search t);
       Dream.get (Url.package ":name") (Handler.package t);
-      Dream.get (Url.package_docs ":name") (Handler.package_docs t);
       Dream.get (Url.package ~hash:":hash" ":name") (Handler.package t);
+      Dream.get (Url.package_doc ":name") (Handler.package_doc ~root:true t);
       Dream.get
-        (Url.package_with_version ":name" ":version")
-        ((Handler.package_versioned t) Handler.Package);
+        (Url.package_doc ":name" ~page:"**")
+        (Handler.package_doc ~root:false t);
       Dream.get
-        (Url.package_with_version ~hash:":hash" ":name" ":version")
-        ((Handler.package_versioned t) Handler.Universe);
+        (Url.package_with_version ~canonical:false ":name" ":version")
+        ((Handler.package_with_version t) Handler.Package);
       Dream.get
-        (Url.package_doc ":name" ":version" ~page:"**")
-        ((Handler.package_doc t) Handler.Package);
+        (Url.package_with_version ~canonical:false ~hash:":hash" ":name"
+           ":version")
+        ((Handler.package_with_version t) Handler.Universe);
       Dream.get
-        (Url.package_doc ~hash:":hash" ~page:"**" ":name" ":version")
-        ((Handler.package_doc t) Handler.Universe);
+        (Url.package_doc_with_version ~canonical:false ":name" ":version")
+        ((Handler.package_doc_with_version ~root:true t) Handler.Package);
+      Dream.get
+        (Url.package_doc_with_version ~canonical:false ":name" ":version"
+           ~page:"**")
+        ((Handler.package_doc_with_version ~root:false t) Handler.Package);
+      Dream.get
+        (Url.package_doc_with_version ~canonical:false ~hash:":hash" ~page:"**"
+           ":name" ":version")
+        ((Handler.package_doc_with_version ~root:false t) Handler.Universe);
     ]
 
 let graphql_route t =

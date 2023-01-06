@@ -25,15 +25,17 @@ let news ~page ~pages_number news = News.render ~page ~pages_number news
 let news_post news = News_post.render news
 let jobs ?location ~locations jobs = Jobs.render ?location ~locations jobs
 
-let package_overview ~documentation_status ~readme ~readme_title ~dependencies
-    ~rev_dependencies ~conflicts ~homepages ~source ~changes_filename
-    ~license_filename package =
-  Package_overview.render ~documentation_status ~readme ~readme_title
+let package_overview ~canonical ~documentation_status ~readme ~readme_title
+    ~dependencies ~rev_dependencies ~conflicts ~homepages ~source
+    ~changes_filename ~license_filename package =
+  Package_overview.render ~canonical ~documentation_status ~readme ~readme_title
     ~dependencies ~rev_dependencies ~conflicts ~homepages ~source
     ~changes_filename ~license_filename package
 
-let package_documentation ~title ~path ~toc ~maptoc ~content package =
-  Package_documentation.render ~title ~path ~toc ~maptoc ~content package
+let package_documentation ~canonical ~title ~path ~toc ~maptoc ~content package
+    =
+  Package_documentation.render ~canonical ~title ~path ~toc ~maptoc ~content
+    package
 
 let packages stats = Packages.render stats
 let packages_search ~total packages = Packages_search.render ~total packages

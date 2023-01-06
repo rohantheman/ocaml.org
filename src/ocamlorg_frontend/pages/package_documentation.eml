@@ -1,4 +1,5 @@
 let sidebar
+~canonical
 ~str_path
 ~toc
 ~maptoc
@@ -6,7 +7,7 @@ let sidebar
 =
   <div class="flex flex-col">
     <% if str_path != [] && toc != [] then ( %>
-    <a title="Package <%s package.name %>" class="xl:hidden py-1 font-regular text-body-600 hover:text-orange-600 transition-colors mb-6" href="<%s Url.package_doc package.name package.version %>">
+    <a title="Package <%s package.name %>" class="xl:hidden py-1 font-regular text-body-600 hover:text-orange-600 transition-colors mb-6" href="<%s Url.package_doc_root_with_version ~canonical package.name package.version %>">
       back to documentation root
     </a>
     <% ); %>
@@ -16,12 +17,13 @@ let sidebar
     </div><% ); %>
     <div class="space-y-6 flex flex-col overflow-x:scroll">
       <div>
-      <%s! Navmap.render ~package ~path:str_path maptoc %>
+      <%s! Navmap.render ~canonical ~package ~path:str_path maptoc %>
       </div>
     </div>
   </div>
 
 let render
+~canonical
 ~title
 ~(path: Breadcrumbs.path_item list)
 ~toc
@@ -44,9 +46,10 @@ let path_page = match str_path |> String.concat "/" with
                 | path -> Some (path ^ if String.contains path '.' then "" else "/index.html") in
 Package_layout.render
 ~title
-~description:(Printf.sprintf "%s %s: %s" package.name package.version package.description)
+~description:(if canonical then Printf.sprintf "%s: %s" package.name package.description else Printf.sprintf "%s %s: %s" package.name package.version package.description)
 ~package
-~canonical:(Url.package_doc package.name package.version ?page:path_page)
+~canonical:(Url.package_doc ?page:path_page ?hash:None package.name)
+~canonical_package:canonical
 ~styles:["/css/main.css"; "/css/doc.css"]
 ~tab:Documentation @@
 <div x-data="{ open: false, sidebar: window.innerWidth > 1024 && true, showOnMobile: false}" @resize.window="sidebar = window.innerWidth > 1024">
@@ -65,7 +68,7 @@ Package_layout.render
       x-show="sidebar" x-transition:enter="transition duration-200 ease-out"
       x-transition:enter-start="-translate-x-full" x-transition:leave="transition duration-100 ease-in"
       x-transition:leave-end="-translate-x-full">
-      <%s! sidebar ~str_path ~toc ~maptoc package %>
+      <%s! sidebar ~canonical ~str_path ~toc ~maptoc package %>
     </div>
     <div class="flex-1 z-0 z- w-full lg:max-w-3xl relative lg:pt-6">
       <% if (maptoc != []) && (List.length path > 1) then (%>
