@@ -20,7 +20,8 @@ type t = {
   body_html : string;
 }
 [@@deriving
-  stable_record ~version:metadata ~remove:[ slug; body_md; body_html ]]
+  stable_record ~version:metadata ~remove:[ slug; body_md; body_html ],
+    show { with_path = false }]
 
 let of_metadata m = of_metadata m ~slug:(Utils.slugify m.title)
 
@@ -32,25 +33,6 @@ let all () =
       let body_html = Omd.of_string body_md |> Omd.to_html in
       of_metadata metadata ~body_md ~body_html)
     "success_stories"
-
-let pp ppf v =
-  Fmt.pf ppf
-    {|
-  { title = %a
-  ; slug = %a
-  ; logo = %a
-  ; background = %a
-  ; theme = %a
-  ; synopsis = %a
-  ; url = %a
-  ; body_md = %a
-  ; body_html = %a
-  }|}
-    Pp.string v.title Pp.string v.slug Pp.string v.logo Pp.string v.background
-    Pp.string v.theme Pp.string v.synopsis Pp.string v.url Pp.string v.body_md
-    Pp.string v.body_html
-
-let pp_list = Pp.list pp
 
 let template () =
   Format.asprintf
@@ -69,4 +51,5 @@ type t =
   
 let all = %a
 |}
-    pp_list (all ())
+    (Fmt.brackets (Fmt.list pp ~sep:Fmt.semi))
+    (all ())

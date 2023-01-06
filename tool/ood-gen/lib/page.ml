@@ -16,7 +16,8 @@ type t = {
   body_html : string;
 }
 [@@deriving
-  stable_record ~version:metadata ~remove:[ slug; body_md; body_html ]]
+  stable_record ~version:metadata ~remove:[ slug; body_md; body_html ],
+    show { with_path = false }]
 
 let all () =
   Utils.map_files_with_names
@@ -31,24 +32,6 @@ let all () =
       in
       of_metadata metadata ~slug ~body_md ~body_html)
     "pages/*.md"
-
-let pp ppf v =
-  Fmt.pf ppf
-    {|
-  { slug = %a
-  ; title = %a
-  ; description = %a
-  ; meta_title = %a
-  ; meta_description = %a
-  ; body_md = %a
-  ; body_html = %a
-  }
-|}
-    Pp.string v.slug Pp.string v.title Pp.string v.description Pp.string
-    v.meta_title Pp.string v.meta_description Pp.string v.body_md Pp.string
-    v.body_html
-
-let pp_list = Pp.list pp
 
 let template () =
   Format.asprintf
@@ -66,4 +49,5 @@ type t =
 
 let all = %a
 |}
-    pp_list (all ())
+    (Fmt.brackets (Fmt.list pp ~sep:Fmt.semi))
+    (all ())

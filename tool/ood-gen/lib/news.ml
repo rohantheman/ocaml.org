@@ -16,7 +16,8 @@ type t = {
   body_html : string;
 }
 [@@deriving
-  stable_record ~version:metadata ~add:[ authors ] ~remove:[ slug; body_html ]]
+  stable_record ~version:metadata ~add:[ authors ] ~remove:[ slug; body_html ],
+    show { with_path = false }]
 
 let all () =
   Utils.map_files_with_names
@@ -30,21 +31,6 @@ let all () =
       of_metadata metadata ~slug ~body_html)
     "news/*/*.md"
   |> List.sort (fun a b -> String.compare b.date a.date)
-
-let pp ppf v =
-  Fmt.pf ppf
-    {|
-  { title = %a
-  ; slug = %a
-  ; description = %a
-  ; date = %a
-  ; tags = %a
-  ; body_html = %a
-  }|}
-    Pp.string v.title Pp.string v.slug Pp.string v.description Pp.string v.date
-    (Pp.list Pp.string) v.tags Pp.string v.body_html
-
-let pp_list = Pp.list pp
 
 let template () =
   Format.asprintf
@@ -60,4 +46,5 @@ type t =
   
 let all = %a
 |}
-    pp_list (all ())
+    (Fmt.brackets (Fmt.list pp ~sep:Fmt.semi))
+    (all ())

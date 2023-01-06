@@ -20,7 +20,8 @@ type t = {
 }
 [@@deriving
   stable_record ~version:metadata ~add:[ id ]
-    ~remove:[ slug; fpath; toc_html; body_md; body_html ]]
+    ~remove:[ slug; fpath; toc_html; body_md; body_html ],
+    show { with_path = false }]
 
 let of_metadata m = of_metadata m ~slug:m.id
 
@@ -78,25 +79,6 @@ let all () =
       of_metadata metadata ~fpath ~toc_html ~body_md ~body_html)
     "tutorials/*.md"
 
-let pp ppf v =
-  Fmt.pf ppf
-    {|
-  { title = %a
-  ; fpath = %a
-  ; slug = %a
-  ; description = %a
-  ; date = %a
-  ; category = %a
-  ; body_md = %a
-  ; toc_html = %a
-  ; body_html = %a
-  }|}
-    Pp.string v.title Pp.string v.fpath Pp.string v.slug Pp.string v.description
-    Pp.string v.date Pp.string v.category Pp.string v.body_md Pp.string
-    v.toc_html Pp.string v.body_html
-
-let pp_list = Pp.list pp
-
 let template () =
   Format.asprintf
     {|
@@ -114,4 +96,5 @@ type t =
   
 let all = %a
 |}
-    pp_list (all ())
+    (Fmt.brackets (Fmt.list pp ~sep:Fmt.semi))
+    (all ())

@@ -1,5 +1,6 @@
 module Proficiency = struct
   type t = [ `Beginner | `Intermediate | `Advanced ]
+  [@@deriving show { with_path = false }]
 
   let of_string = function
     | "beginner" -> Ok `Beginner
@@ -53,7 +54,8 @@ type t = {
 }
 [@@deriving
   stable_record ~version:metadata ~modify:[ difficulty ]
-    ~remove:[ statement; solution ]]
+    ~remove:[ statement; solution ],
+    show { with_path = false }]
 
 let of_metadata =
   of_metadata ~modify_difficulty:(fun d ->
@@ -71,28 +73,6 @@ let all () =
       let solution = Omd.to_html (Hilite.Md.transform solution_blocks) in
       of_metadata metadata ~statement ~solution)
     "problems/*.md"
-
-let pp_proficiency ppf v =
-  Fmt.pf ppf "%s"
-    (match v with
-    | `Beginner -> "`Beginner"
-    | `Intermediate -> "`Intermediate"
-    | `Advanced -> "`Advanced")
-
-let pp ppf v =
-  Fmt.pf ppf
-    {|
-  { title = %a
-  ; number = %a
-  ; difficulty = %a
-  ; tags = %a
-  ; statement = %a
-  ; solution = %a
-  }|}
-    Pp.string v.title Pp.string v.number pp_proficiency v.difficulty
-    Pp.string_list v.tags Pp.string v.statement Pp.string v.solution
-
-let pp_list = Pp.list pp
 
 let template () =
   Format.asprintf
@@ -114,4 +94,5 @@ type t =
   
 let all = %a
 |}
-    pp_list (all ())
+    (Fmt.brackets (Fmt.list pp ~sep:Fmt.semi))
+    (all ())
