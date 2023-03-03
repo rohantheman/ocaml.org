@@ -5,7 +5,7 @@ require 'date'
 require 'sinatra'
 require 'sinatra/reloader' if development?
 
-url = 'http://healthycanadians.gc.ca/recall-alert-rappel-avis/api/recent/en'
+url = 'https://healthycanadians.gc.ca/recall-alert-rappel-avis/api/recent/en'
 uri = URI(url)
 response = Net::HTTP.get(uri)
 recalls = JSON.parse(response)
